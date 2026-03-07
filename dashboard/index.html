@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Plant Monitor</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, sans-serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; }
+
+    header {
+      padding: 1rem 2rem;
+      background: #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      border-bottom: 1px solid #334155;
+    }
+    header h1 { font-size: 1.25rem; font-weight: 600; }
+    #status-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: #ef4444; margin-left: auto;
+    }
+    #status-dot.connected { background: #22c55e; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      padding: 1.5rem 2rem;
+    }
+    .card {
+      background: #1e293b;
+      border-radius: 0.75rem;
+      padding: 1.25rem;
+      border: 1px solid #334155;
+    }
+    .card .label { font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; }
+    .card .value { font-size: 2rem; font-weight: 700; margin-top: 0.25rem; }
+    .card .unit  { font-size: 0.9rem; color: #94a3b8; }
+
+    .chart-section { padding: 0 2rem 2rem; }
+    .chart-section h2 { font-size: 1rem; color: #94a3b8; margin-bottom: 0.75rem; }
+    .chart-wrap { background: #1e293b; border-radius: 0.75rem; padding: 1rem; border: 1px solid #334155; }
+
+    .pump-section { padding: 0 2rem 2rem; display: flex; gap: 1rem; }
+    .btn {
+      padding: 0.6rem 1.5rem;
+      border: none; border-radius: 0.5rem;
+      font-size: 0.9rem; font-weight: 600; cursor: pointer;
+    }
+    .btn-on  { background: #22c55e; color: #fff; }
+    .btn-off { background: #ef4444; color: #fff; }
+    .pump-status { display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; color: #94a3b8; }
+  </style>
+</head>
+<body>
+
+<header>
+  <span>🌱</span>
+  <h1>Plant Monitor</h1>
+  <div id="status-dot" title="WebSocket"></div>
+</header>
+
+<div class="grid">
+  <div class="card">
+    <div class="label">Soil Moisture</div>
+    <div class="value" id="val-moisture">--</div>
+    <div class="unit">%</div>
+  </div>
+  <div class="card">
+    <div class="label">Temperature</div>
+    <div class="value" id="val-temp">--</div>
+    <div class="unit">°C</div>
+  </div>
+  <div class="card">
+    <div class="label">Humidity</div>
+    <div class="value" id="val-humidity">--</div>
+    <div class="unit">%</div>
+  </div>
+  <div class="card">
+    <div class="label">Pump</div>
+    <div class="value" id="val-pump" style="font-size:1.2rem; margin-top:0.5rem">--</div>
+  </div>
+</div>
+
+<div class="pump-section">
+  <button class="btn btn-on"  onclick="controlPump('on')">Pump ON</button>
+  <button class="btn btn-off" onclick="controlPump('off')">Pump OFF</button>
+  <div class="pump-status" id="pump-status-msg"></div>
+</div>
+
+<div class="chart-section">
+  <h2>Soil Moisture — last 50 readings</h2>
+  <div class="chart-wrap">
+    <canvas id="chart-moisture" height="100"></canvas>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
