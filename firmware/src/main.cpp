@@ -9,8 +9,8 @@
 
 #define DHT_PIN       14
 
-const char* ssid = "tenet_2.4GHz";
-const char* password = "@passwordtenet123";
+const char* ssid = "";
+const char* password = "";
 
 DHT dht(DHT_PIN, DHT11);
 
@@ -101,3 +101,4 @@ void loop() {
 
   delay(2000);
 }
+
